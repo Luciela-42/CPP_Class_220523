@@ -44,3 +44,8 @@ void World::Render()
 		Actor->Render();
 	}
 }
+
+void World::SpawnActor(AActor* NewActor)
+{
+	MyActors.push_back(NewActor);
+}

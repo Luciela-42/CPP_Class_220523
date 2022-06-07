@@ -6,7 +6,7 @@ class AActor
 {
 public:
 	AActor();
-	AActor(int NewX, int NewY, char NewShape, bool bNewCollision = false, int NewSortOrder = 1	);
+	AActor(int NewX, int NewY, char NewShape, bool bNewCollision = false, int NewSortOrder = 1);
 	virtual ~AActor();
 
 	//ESpriteType Type;
@@ -23,4 +23,6 @@ public:
 	{
 		return First->SortOrder < Second->SortOrder;
 	}
+
+	bool PredictCollision(int PredictX, int PredictY);
 };

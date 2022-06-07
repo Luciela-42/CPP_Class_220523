@@ -7,9 +7,11 @@ class APlayer : public AActor
 {
 public:
 	APlayer();
-	APlayer(int NewX, int NewY, char NewShape, bool bNewCollision = false, int NewSortOrder = 5);
+	APlayer(int NewX, int NewY, char NewShape, bool bNewCollision = false, int NewSortOrder = 4);
 	virtual ~APlayer();
 
 	virtual void Tick() override;
+
+	bool IsGoal();
 };
 

@@ -13,8 +13,11 @@
 
 int Engine::KeyCode = 0;
 
+Engine* Engine::Instance = nullptr;
+
 Engine::Engine()
 {
+	Instance = this;
 	Initialize();
 }
 
@@ -46,16 +49,16 @@ void Engine::Load(string MapFilename)
 			switch (Cursor)
 			{
 			case '#':
-				MyWorld->MyActors.push_back(new AWall((int)X, Y, '#', true));
+				MyWorld->SpawnActor(new AWall((int)X, Y, '#', true));
 				break;
 			case 'P':
-				MyWorld->MyActors.push_back(new APlayer((int)X, Y, 'P', true));
+				MyWorld->SpawnActor(new APlayer((int)X, Y, 'P', true));
 				break;
 			case 'G':
-				MyWorld->MyActors.push_back(new AGoal((int)X, Y, 'G', false));
+				MyWorld->SpawnActor(new AGoal((int)X, Y, 'G', false));
 				break;
 			case 'M':
-				MyWorld->MyActors.push_back(new AMonster((int)X, Y, 'M', false));
+				MyWorld->SpawnActor(new AMonster((int)X, Y, 'M', false));
 				break;
 			}
 			
@@ -67,6 +70,7 @@ void Engine::Load(string MapFilename)
 		Y++;
 	}
 
+	//그리는 순서를 변경
 	sort(MyWorld->MyActors.begin(), MyWorld->MyActors.end(), AActor::compare);
 
 	MapFile.close();
