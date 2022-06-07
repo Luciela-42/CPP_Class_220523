@@ -57,7 +57,7 @@ int SDL_main(int argc, char* argv[])
 		SDL_SetRenderDrawColor(MyRenderer, 0x00, 0x00, 0x00, 0xff);
 		if (X > 800)
 		{
-			X = X - 100;
+			X = 0;
 		}
 		else
 		{
