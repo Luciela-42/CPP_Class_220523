@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <conio.h>
+#include <algorithm>
 
 #include "Engine.h"
 #include "World.h"
@@ -8,6 +10,8 @@
 #include "Player.h"
 #include "Floor.h"
 #include "Monster.h"
+
+int Engine::KeyCode = 0;
 
 Engine::Engine()
 {
@@ -42,25 +46,28 @@ void Engine::Load(string MapFilename)
 			switch (Cursor)
 			{
 			case '#':
-				MyWorld->MyActors.push_back(new AWall(X, Y, '#', true));
-				break;
-			case ' ':
-				MyWorld->MyActors.push_back(new AFloor(X, Y, ' ', false));
+				MyWorld->MyActors.push_back(new AWall((int)X, Y, '#', true));
 				break;
 			case 'P':
-				MyWorld->MyActors.push_back(new APlayer(X, Y, 'P', true));
+				MyWorld->MyActors.push_back(new APlayer((int)X, Y, 'P', true));
 				break;
 			case 'G':
-				MyWorld->MyActors.push_back(new AGoal(X, Y, 'G', true));
+				MyWorld->MyActors.push_back(new AGoal((int)X, Y, 'G', false));
 				break;
 			case 'M':
-				MyWorld->MyActors.push_back(new AGoal(X, Y, 'M', true));
+				MyWorld->MyActors.push_back(new AMonster((int)X, Y, 'M', false));
 				break;
 			}
+			
+
+			MyWorld->MyActors.push_back(new AFloor((int)X, Y, ' ', false));
 		}
+
 
 		Y++;
 	}
+
+	sort(MyWorld->MyActors.begin(), MyWorld->MyActors.end(), AActor::compare);
 
 	MapFile.close();
 }
@@ -69,6 +76,7 @@ void Engine::Run()
 {
 	while (bRunning) // 1 Frame
 	{
+		Input();
 		MyWorld->Tick();
 		MyWorld->Render();
 	}
@@ -78,4 +86,9 @@ void Engine::Terminate()
 {
 	delete MyWorld;
 	MyWorld = nullptr;
+}
+
+void Engine::Input()
+{
+	Engine::KeyCode = _getch();
 }

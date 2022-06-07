@@ -29,7 +29,7 @@ void World::Tick()
 	//}
 
 	////range for, C++ 14
-	for (AActor* Actor : MyActors) //for (auto Actor : MyActors)
+	for (auto Actor : MyActors) //for (AActor* Actor : MyActors)
 	{
 		Actor->Tick();
 	}
@@ -37,7 +37,9 @@ void World::Tick()
 
 void World::Render()
 {
-	for (AActor* Actor : MyActors) //for (auto Actor : MyActors)
+	system("cls");
+
+	for (AActor* Actor : MyActors)	//for (auto Actor : MyActors)
 	{
 		Actor->Render();
 	}
