@@ -11,7 +11,17 @@ public:
 	virtual ~APlayer();
 
 	virtual void Tick() override;
+	virtual void Render() override;
 
 	bool IsGoal();
+
+	Uint64 ElapsedTime = 0;
+	Uint64 ProcessTime = 300;
+
+	int SpriteIndex = 0;
+	int SpriteDirection = 0;
 };
+
+
+
 
