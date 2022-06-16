@@ -34,6 +34,7 @@ public:
 
 	int Size = 60;
 
+	virtual void BeginPlay();
 	virtual void Tick();
 	virtual void Render();
 

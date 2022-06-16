@@ -47,6 +47,10 @@ void AActor::LoadBMP(string Filename)
 	MyTexture = SDL_CreateTextureFromSurface(GEngine->MyRenderer, MySurface);
 }
 
+void AActor::BeginPlay()
+{
+}
+
 void AActor::Tick()
 {
 }

@@ -3,6 +3,8 @@
 #include <conio.h>
 #include <algorithm>
 
+#include "SDL_mixer.h"
+
 #include "Engine.h"
 #include "World.h"
 #include "Wall.h"
@@ -10,6 +12,8 @@
 #include "Player.h"
 #include "Floor.h"
 #include "Monster.h"
+#include "Sound.h"
+#include "Text.h"
 
 int Engine::KeyCode = 0;
 
@@ -40,6 +44,12 @@ void Engine::Initialize()
 	MyWindow = SDL_CreateWindow("Maze", 100, 100, 800, 600, SDL_WINDOW_VULKAN);
 	MyRenderer = SDL_CreateRenderer(MyWindow, -1, SDL_RENDERER_ACCELERATED |
 		SDL_RENDERER_TARGETTEXTURE);
+
+	//사운드 초기화
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	//폰트 초기화
+	TTF_Init();
 }
 
 void Engine::Load(string MapFilename)
@@ -48,11 +58,12 @@ void Engine::Load(string MapFilename)
 	ifstream MapFile(MapFilename);
 
 	int Y = 0;
+	int MaxX = 0;
 	while (MapFile.peek() != EOF)
 	{
 		char Buffer[1024] = { 0, };
 		MapFile.getline(Buffer, 1024);
-
+		MaxX = strlen(Buffer);
 		for (size_t X = 0; X < strlen(Buffer); ++X)
 		{
 			char Cursor = Buffer[X];
@@ -80,14 +91,22 @@ void Engine::Load(string MapFilename)
 		Y++;
 	}
 
+	SDL_SetWindowSize(MyWindow, MaxX * 60, Y * 60);
+
 	//그리는 순서를 변경
 	sort(MyWorld->MyActors.begin(), MyWorld->MyActors.end(), AActor::compare);
 
 	MapFile.close();
+
+	MyWorld->SpawnActor(new ASound(100, 100, "data/bgm.mp3", -1));
+	MyWorld->SpawnActor(new AText(100, 100, "안녕하세요, World", SDL_Color{ 0, 0, 0 }, 40));
 }
 
 void Engine::Run()
 {
+	//Run
+	MyWorld->BeginPlay();
+
 	while (bRunning) // 1 Frame
 	{
 		DeltaSeconds = SDL_GetTicks64() - LastTick;
@@ -110,6 +129,8 @@ void Engine::Terminate()
 {
 	delete MyWorld;
 	MyWorld = nullptr;
+
+	TTF_Quit();
 
 	SDL_DestroyRenderer(MyRenderer);
 	SDL_DestroyWindow(MyWindow);
